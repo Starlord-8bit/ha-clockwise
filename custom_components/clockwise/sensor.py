@@ -49,7 +49,7 @@ class UptimeSensor(ClockwiseEntity, SensorEntity):
     """How long the device has been running since last flash/reset."""
     _attr_name = "Uptime"
     _attr_icon = "mdi:timer-outline"
-    _attr_state_class = SensorStateClass.TOTAL_INCREASING
+    # No state_class — value is a formatted string, not numeric
 
     def __init__(self, coordinator: ClockwiseCoordinator) -> None:
         super().__init__(coordinator, "uptime")
