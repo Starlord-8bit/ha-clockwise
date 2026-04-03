@@ -1,7 +1,7 @@
 """Constants for the Clockwise integration."""
 
 DOMAIN = "clockwise"
-DEFAULT_SCAN_INTERVAL = 30  # seconds
+DEFAULT_SCAN_INTERVAL = 300  # 5 minutes — just to catch reboots/external changes
 
 # OG Clockwise v1.4.x clockfaces
 CLOCKFACES_OG = {

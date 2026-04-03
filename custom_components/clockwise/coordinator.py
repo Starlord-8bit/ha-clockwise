@@ -49,12 +49,13 @@ class ClockwiseCoordinator(DataUpdateCoordinator[dict]):
             raise UpdateFailed(f"Cannot reach Clockwise at {self.host}: {err}") from err
 
     async def async_set(self, params: dict[str, str]) -> None:
-        """POST /set with given key=value params."""
+        """POST /set and optimistically update local state (no poll round-trip)."""
         from urllib.parse import urlencode
         await self.async_set_raw(urlencode(params))
 
     async def async_set_raw(self, body: str) -> None:
-        """POST /set with a pre-encoded body string."""
+        """POST /set with a pre-encoded body, then update local state optimistically."""
+        from urllib.parse import parse_qs
         url = f"http://{self.host}/set"
         try:
             async with aiohttp.ClientSession() as session:
@@ -66,7 +67,36 @@ class ClockwiseCoordinator(DataUpdateCoordinator[dict]):
                 ) as resp:
                     if resp.status not in (200, 204):
                         raise UpdateFailed(f"Set failed with status {resp.status}")
-            await self.async_request_refresh()
+
+            # Update local coordinator data optimistically — avoids a poll round-trip
+            # and lets the ESP32 rest between our 5-minute polls
+            if self.data is not None:
+                parsed = parse_qs(body, keep_blank_values=True)
+                key_map = {
+                    "clockFace": "clockface",
+                    "displayBright": "displaybright",
+                    "displayRotation": "displayrotation",
+                    "use24hFormat": "use24hformat",
+                    "ntpServer": "ntpserver",
+                    "brightMethod": "brightmethod",
+                    "nightMode": "nightmode",
+                    "nightLevel": "nightlevel",
+                    "nightStarth": "nightstarth",
+                    "nightStartm": "nightstartm",
+                    "nightEndh": "nightendh",
+                    "nightEndm": "nightendm",
+                    "autoChange": "autochange",
+                    "reversePhase": "reversephase",
+                    "specialLed": "specialled",
+                    "swapBlueGreen": "swapbluegreen",
+                    "canvasFile": "canvasfile",
+                    "canvasServer": "canvasserver",
+                }
+                for post_key, header_key in key_map.items():
+                    if post_key in parsed:
+                        self.data[header_key] = parsed[post_key][0]
+                self.async_set_updated_data(self.data)
+
         except aiohttp.ClientError as err:
             raise UpdateFailed(f"Cannot reach Clockwise at {self.host}: {err}") from err
 
