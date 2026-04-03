@@ -17,5 +17,21 @@
     "abort": {
       "already_configured": "This Clockwise device is already configured."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Clockwise Settings",
+        "description": "Update connection settings. Poll interval controls how often HA checks for external changes (e.g. via the web UI). Changes made in HA are applied instantly regardless.",
+        "data": {
+          "host": "IP Address",
+          "scan_interval": "Poll interval (seconds)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to device at new IP address.",
+      "not_clockwise": "Device at new IP doesn't look like a Clockwise clock."
+    }
   }
 }

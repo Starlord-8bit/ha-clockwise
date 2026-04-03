@@ -21,12 +21,19 @@ class ClockwiseEntity(CoordinatorEntity[ClockwiseCoordinator]):
     @property
     def device_info(self) -> DeviceInfo:
         data = self.coordinator.data or {}
+        is_plus = "specialled" in data
+        if is_plus:
+            fw_version = data.get("version", "unknown")
+            model = f"ClockWise Plus v{fw_version}"
+        else:
+            fw_version = data.get("x-cw_fw_version", "unknown")
+            model = data.get("x-cw_fw_name", "Clockwise")
         return DeviceInfo(
             identifiers={(DOMAIN, self.coordinator.host)},
             name=self.coordinator.entry.title,
-            manufacturer="jnthas / Clockwise",
-            model=data.get("x-cw_fw_name", "Clockwise"),
-            sw_version=data.get("x-cw_fw_version") or data.get("version", "unknown"),
+            manufacturer="jnthas" if not is_plus else "MonsterYuan (topyuan.top)",
+            model=model,
+            sw_version=fw_version,
             configuration_url=f"http://{self.coordinator.host}",
         )
 
