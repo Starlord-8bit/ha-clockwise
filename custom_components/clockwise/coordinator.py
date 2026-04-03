@@ -49,13 +49,19 @@ class ClockwiseCoordinator(DataUpdateCoordinator[dict]):
             raise UpdateFailed(f"Cannot reach Clockwise at {self.host}: {err}") from err
 
     async def async_set(self, params: dict[str, str]) -> None:
-        """POST /set with given params."""
+        """POST /set with given key=value params."""
+        from urllib.parse import urlencode
+        await self.async_set_raw(urlencode(params))
+
+    async def async_set_raw(self, body: str) -> None:
+        """POST /set with a pre-encoded body string."""
         url = f"http://{self.host}/set"
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.post(
                     url,
-                    data=params,
+                    data=body,
+                    headers={"Content-Type": "application/x-www-form-urlencoded"},
                     timeout=aiohttp.ClientTimeout(total=10),
                 ) as resp:
                     if resp.status not in (200, 204):

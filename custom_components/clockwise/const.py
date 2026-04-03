@@ -55,3 +55,21 @@ LED_COLOR_ORDER = {
     "1": "RBG",
     "2": "GBR",
 }
+
+BRIGHTNESS_METHOD = {
+    "0": "Auto (LDR)",
+    "1": "Time-based",
+    "2": "Fixed",
+}
+
+NIGHT_MODE = {
+    "0": "Nothing",
+    "1": "Turn off display",
+    "2": "Big clock",
+}
+
+AUTO_CHANGE_FACE = {
+    "0": "Off",
+    "1": "Sequence",
+    "2": "Random",
+}
