@@ -1,4 +1,4 @@
-"""Switch entities: 24h format, swap RGB."""
+"""Switch entities: 24h format."""
 from __future__ import annotations
 
 from homeassistant.components.switch import SwitchEntity
@@ -15,10 +15,7 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: ClockwiseCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        Use24hSwitch(coordinator),
-        SwapBlueGreenSwitch(coordinator),
-    ])
+    async_add_entities([Use24hSwitch(coordinator)])
 
 
 class Use24hSwitch(ClockwiseEntity, SwitchEntity):
@@ -37,21 +34,3 @@ class Use24hSwitch(ClockwiseEntity, SwitchEntity):
 
     async def async_turn_off(self, **kwargs) -> None:
         await self.coordinator.async_set({"use24hFormat": "0"})
-
-
-class SwapBlueGreenSwitch(ClockwiseEntity, SwitchEntity):
-    _attr_name = "Swap Blue/Green (RBG)"
-    _attr_icon = "mdi:palette"
-
-    def __init__(self, coordinator: ClockwiseCoordinator) -> None:
-        super().__init__(coordinator, "swapblugreen")
-
-    @property
-    def is_on(self) -> bool:
-        return self._val("swapbluegreen") == "1"
-
-    async def async_turn_on(self, **kwargs) -> None:
-        await self.coordinator.async_set({"swapBlueGreen": "1"})
-
-    async def async_turn_off(self, **kwargs) -> None:
-        await self.coordinator.async_set({"swapBlueGreen": "0"})

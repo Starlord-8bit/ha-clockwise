@@ -3,7 +3,8 @@
 DOMAIN = "clockwise"
 DEFAULT_SCAN_INTERVAL = 30  # seconds
 
-CLOCKFACES = {
+# OG Clockwise v1.4.x clockfaces
+CLOCKFACES_OG = {
     "1": "Super Mario",
     "2": "Pac-Man",
     "3": "World Map",
@@ -13,9 +14,44 @@ CLOCKFACES = {
     "7": "Canvas",
 }
 
+# ClockWise Plus v3.x clockfaces (superset)
+CLOCKFACES_PLUS = {
+    "1": "Super Mario",
+    "2": "Pac-Man",
+    "3": "World Map",
+    "4": "Time In Words",
+    "5": "Clock Tower",
+    "6": "Pokedex",
+    "7": "Retro Computer",
+    "8": "Snoopy",
+    "9": "Nyan Cat",
+    "10": "Transformer",
+    "11": "Minecraft Torch",
+    "12": "Coffee",
+    "13": "Pepsi",
+    "14": "Pikachu",
+    "15": "Shar Pei Dog",
+    "16": "Girl",
+    "17": "Kirby",
+    "18": "Labubu",
+    "19": "Hello Kitty",
+    "20": "Twinkle Twinkle",
+    "21": "Zootopia",
+}
+
+# Combined map (Plus is a superset; OG faces match by index)
+CLOCKFACES = CLOCKFACES_PLUS
+
 ROTATIONS = {
     "0": "0°",
     "1": "90°",
     "2": "180°",
     "3": "270°",
+}
+
+# LED colour order options (Plus firmware uses specialLed)
+LED_COLOR_ORDER = {
+    "0": "RGB",
+    "1": "RBG",
+    "2": "GBR",
 }

@@ -23,10 +23,10 @@ class ClockwiseEntity(CoordinatorEntity[ClockwiseCoordinator]):
         data = self.coordinator.data or {}
         return DeviceInfo(
             identifiers={(DOMAIN, self.coordinator.host)},
-            name=f"Clockwise ({self.coordinator.host})",
+            name=self.coordinator.entry.title,
             manufacturer="jnthas / Clockwise",
             model=data.get("x-cw_fw_name", "Clockwise"),
-            sw_version=data.get("x-cw_fw_version", "unknown"),
+            sw_version=data.get("x-cw_fw_version") or data.get("version", "unknown"),
             configuration_url=f"http://{self.coordinator.host}",
         )
 

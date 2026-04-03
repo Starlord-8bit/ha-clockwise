@@ -29,15 +29,22 @@ class ClockwiseCoordinator(DataUpdateCoordinator[dict]):
         )
 
     async def _async_update_data(self) -> dict:
-        """Fetch all device state from /get response headers."""
+        """Fetch all device state from /get response headers, plus LDR pin read."""
         url = f"http://{self.host}/get"
         try:
             async with aiohttp.ClientSession() as session:
                 async with session.get(url, timeout=aiohttp.ClientTimeout(total=10)) as resp:
                     if resp.status != 204:
                         raise UpdateFailed(f"Unexpected status {resp.status}")
-                    # All config lives in response headers (lowercase keys)
-                    return {k.lower(): v for k, v in resp.headers.items()}
+                    data = {k.lower(): v for k, v in resp.headers.items()}
+
+                # Also poll LDR pin value (separate endpoint)
+                ldr_pin = data.get("ldrpin", "35")
+                ldr_val = await self.async_read_pin(int(ldr_pin))
+                if ldr_val is not None:
+                    data["ldr_value"] = str(ldr_val)
+
+                return data
         except aiohttp.ClientError as err:
             raise UpdateFailed(f"Cannot reach Clockwise at {self.host}: {err}") from err
 

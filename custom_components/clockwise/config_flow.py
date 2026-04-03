@@ -31,7 +31,7 @@ class ClockwiseConfigFlow(ConfigFlow, domain=DOMAIN):
                         else:
                             await self.async_set_unique_id(host)
                             self._abort_if_unique_id_configured()
-                            name = user_input.get(CONF_NAME) or f"Clockwise ({host})"
+                            name = user_input.get(CONF_NAME) or "Clockwise"
                             return self.async_create_entry(
                                 title=name,
                                 data={CONF_HOST: host},
