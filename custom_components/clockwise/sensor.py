@@ -15,11 +15,11 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: ClockwiseCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        LdrSensor(coordinator),
-        UptimeSensor(coordinator),
-        NightBrightnessLevelSensor(coordinator),
-    ])
+    is_plus = "specialled" in (coordinator.data or {})
+    entities: list = [LdrSensor(coordinator), UptimeSensor(coordinator)]
+    if is_plus:
+        entities.append(NightBrightnessLevelSensor(coordinator))
+    async_add_entities(entities)
 
 
 class LdrSensor(ClockwiseEntity, SensorEntity):

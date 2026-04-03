@@ -17,10 +17,12 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: ClockwiseCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        NightStartTime(coordinator),
-        NightEndTime(coordinator),
-    ])
+    is_plus = "specialled" in (coordinator.data or {})
+    if is_plus:
+        async_add_entities([
+            NightStartTime(coordinator),
+            NightEndTime(coordinator),
+        ])
 
 
 class NightStartTime(ClockwiseEntity, TimeEntity):

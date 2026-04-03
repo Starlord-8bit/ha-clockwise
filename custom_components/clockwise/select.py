@@ -15,14 +15,19 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: ClockwiseCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
+    is_plus = "specialled" in (coordinator.data or {})
+    entities: list = [
         ClockfaceSelect(coordinator),
         RotationSelect(coordinator),
         LedColorOrderSelect(coordinator),
-        BrightnessMethodSelect(coordinator),
-        NightModeSelect(coordinator),
-        AutoChangeFaceSelect(coordinator),
-    ])
+    ]
+    if is_plus:
+        entities += [
+            BrightnessMethodSelect(coordinator),
+            NightModeSelect(coordinator),
+            AutoChangeFaceSelect(coordinator),
+        ]
+    async_add_entities(entities)
 
 
 class ClockfaceSelect(ClockwiseEntity, SelectEntity):

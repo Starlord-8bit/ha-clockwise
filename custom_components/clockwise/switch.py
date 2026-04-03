@@ -15,10 +15,11 @@ async def async_setup_entry(
     hass: HomeAssistant, entry: ConfigEntry, async_add_entities: AddEntitiesCallback
 ) -> None:
     coordinator: ClockwiseCoordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([
-        Use24hSwitch(coordinator),
-        ReversePhaseSwitch(coordinator),
-    ])
+    is_plus = "specialled" in (coordinator.data or {})
+    entities: list = [Use24hSwitch(coordinator)]
+    if is_plus:
+        entities.append(ReversePhaseSwitch(coordinator))
+    async_add_entities(entities)
 
 
 class Use24hSwitch(ClockwiseEntity, SwitchEntity):
