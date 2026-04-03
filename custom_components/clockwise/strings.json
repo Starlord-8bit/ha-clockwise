@@ -1,0 +1,21 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to Clockwise",
+        "description": "Enter the IP address of your Clockwise LED clock.",
+        "data": {
+          "host": "IP Address",
+          "name": "Device Name (optional)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect to device. Check the IP address and ensure the clock is online.",
+      "not_clockwise": "Device responded but doesn't look like a Clockwise clock."
+    },
+    "abort": {
+      "already_configured": "This Clockwise device is already configured."
+    }
+  }
+}

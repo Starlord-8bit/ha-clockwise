@@ -1,0 +1,11 @@
+{
+  "domain": "clockwise",
+  "name": "Clockwise LED Clock",
+  "codeowners": ["@Starlord-8bit"],
+  "config_flow": true,
+  "documentation": "https://github.com/Starlord-8bit/ha-clockwise",
+  "homeassistant": "2024.1.0",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Starlord-8bit/ha-clockwise/issues",
+  "version": "1.0.0"
+}

@@ -1,0 +1,8 @@
+{
+  "name": "Clockwise LED Clock",
+  "description": "Home Assistant integration for the Clockwise open-source LED matrix wall clock",
+  "render_readme": true,
+  "domains": ["button", "number", "select", "sensor", "switch", "text"],
+  "iot_class": "local_polling",
+  "homeassistant": "2024.1.0"
+}
